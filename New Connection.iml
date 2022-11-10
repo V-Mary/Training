@@ -8,8 +8,92 @@
         <option name="defaultSourceRootUrl" value="file://$MODULE_DIR$/src" />
         <option name="moduleContents">
           <ModuleContents>
-            <option name="contentSelectionType" value="PACKAGE_XML" />
-            <option name="packageXmlRelativePath" value="src/package.xml" />
+            <option name="contentSelectionType" value="SELECTED" />
+            <option name="manifest">
+              <Manifest>
+                <option name="types">
+                  <set>
+                    <MetadataType>
+                      <option name="name" value="ApexClass" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="name" value="ApexComponent" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="name" value="ApexPage" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="name" value="ApexTrigger" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="name" value="AuraDefinitionBundle" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="entries">
+                        <list>
+                          <MetadataEntry>
+                            <option name="name" value="Boutique_Resource__c" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                        </list>
+                      </option>
+                      <option name="name" value="CustomObject" />
+                      <option name="wildcard" value="false" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="entries">
+                        <list>
+                          <MetadataEntry>
+                            <option name="name" value="Product_Family" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Purpose_of_Visit" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Service" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                        </list>
+                      </option>
+                      <option name="name" value="GlobalValueSet" />
+                      <option name="wildcard" value="false" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="entries">
+                        <list>
+                          <MetadataEntry>
+                            <option name="name" value="Boutique_Resource__c-Boutique Resource Layout" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Boutique_Resource__c-Location" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Boutique_Resource__c-Purpose of Visit" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Boutique_Resource__c-Team Member" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                        </list>
+                      </option>
+                      <option name="name" value="Layout" />
+                      <option name="wildcard" value="false" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="name" value="LightningComponentBundle" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="name" value="StaticResource" />
+                    </MetadataType>
+                  </set>
+                </option>
+              </Manifest>
+            </option>
           </ModuleContents>
         </option>
       </configuration>
