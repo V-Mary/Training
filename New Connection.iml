@@ -44,6 +44,18 @@
                       <option name="entries">
                         <list>
                           <MetadataEntry>
+                            <option name="name" value="Populate_Boutique_Name_based_on_RecType" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                        </list>
+                      </option>
+                      <option name="name" value="Flow" />
+                      <option name="wildcard" value="false" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="entries">
+                        <list>
+                          <MetadataEntry>
                             <option name="name" value="Product_Family" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
