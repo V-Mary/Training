@@ -5,44 +5,43 @@
 public with sharing class ContactService {
     public static void createTeamMember(List<Contact> newContacts){
 
-        List<Contact> contactList = new List<Contact>();
+        List<Contact> contacts = new List<Contact>();
 
-        List<Boutique_Resource__c> boutiqueList = new List<Boutique_Resource__c>();
+        List<Boutique_Resource__c> boutiques = new List<Boutique_Resource__c>();
 
-        for (Contact item: newContacts){
-            if (item.AccountId != null) {
-                contactList.add(item);
+        for (Contact item : newContacts){
+            if ( String.isNotBlank(item.AccountId)) {
+                contacts.add(item);
             }
         }
 
-        for (Contact item: contactList){
+        for (Contact item : contacts){
             Boutique_Resource__c newTeamMember = new Boutique_Resource__c(Boutique__c = item.AccountId, Contact__c = item.Id, Name = item.LastName);
-            newTeamMember.RecordTypeId = '0127S000000c4WtQAI';
-            boutiqueList.add(newTeamMember);
+            newTeamMember.RecordTypeId = ContactUtility.getTeamMemberRTId();
+            boutiques.add(newTeamMember);
         }
 
-        insert boutiqueList;
+        insert boutiques;
 
     }
 
-    public static void updateTeamMember(List<Contact> newContacts, Map<Id,Contact> oldMapContacts, Map<Id,Contact> newMapContacts){
+    public static void updateTeamMember(Map<Id,Contact> oldContactById, Map<Id,Contact> newContactById){
 
         Set<Id> contactIds = new Set<Id>();
 
-        for (Contact item: newContacts){
-            if (item.Name != oldMapContacts.get(item.Id).Name) {
+        for (Contact item : newContactById.values()){
+            if (item.Name != oldContactById.get(item.Id).Name || item.AccountId != oldContactById.get(item.Id).AccountId) {
                 contactIds.add(item.Id);
             }
         }
 
-        List<Boutique_Resource__c> boutiqueList = BoutiqueResourceSelector.getBoutiqueResourceByContactId(contactIds);
+        List<Boutique_Resource__c> boutiques = BoutiqueResourceSelector.getBoutiqueResourceByContactIds(contactIds);
 
-        for (Boutique_Resource__c item: boutiqueList){
-            //item.Boutique__c = newMapContacts.get(item.Contact__c).AccountId;
-            item.Name = newMapContacts.get(item.Contact__c).LastName;
+        for (Boutique_Resource__c item : boutiques){
+            item.Boutique__c = newContactById.get(item.Contact__c).AccountId;
+            item.Name = newContactById.get(item.Contact__c).LastName;
         }
 
-        update boutiqueList;
-
+        update boutiques;
     }
 }
