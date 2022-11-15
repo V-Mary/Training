@@ -34,18 +34,14 @@ public inherited sharing class ContactService {
 
             if (String.isNotBlank(item.AccountId)) {
 
-                if (newContactById.get(item.Id).Name != item.Name || newContactById.get(item.Id).AccountId != item.AccountId) {
+                if (newContactById.get(item.Id).LastName != item.LastName || newContactById.get(item.Id).AccountId != item.AccountId) {
 
                     contactIds.add(item.Id);
                 }
 
-            }else {
-
-                if (String.isNotBlank(newContactById.get(item.Id).AccountId)){
-
-                    contactsToCreateNewTeamMember.add(item);
-                }
             }
+
+            contactsToCreateNewTeamMember.add(newContactById.get(item.Id));
         }
 
         createTeamMember(contactsToCreateNewTeamMember);
@@ -57,8 +53,10 @@ public inherited sharing class ContactService {
             item.Boutique__c = newContactById.get(item.Contact__c).AccountId;
 
             item.Name = newContactById.get(item.Contact__c).LastName;
+
         }
 
         update boutiques;
+
     }
 }
