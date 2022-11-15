@@ -2,7 +2,7 @@
  * Created by Mariya on 14.11.2022.
  */
 
-public with sharing class ContactUtility {
+public without sharing class ContactUtility {
 
     public static final String TEAM_MEMBER = 'Team_Member';
     public static final String LOCATION = 'Location';
