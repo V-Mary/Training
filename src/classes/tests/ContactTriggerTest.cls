@@ -1,21 +1,19 @@
 @IsTest
-public class ContactTriggerTest {
+private class ContactTriggerTest {
 
     @TestSetup
     static void makeData(){
-
         Account acc1 = new Account(Name = 'Acc');
         insert acc1;
 
-        Contact cont1 = new Contact(LastName = 'cont1', AccountId = acc1.Id);
-        Contact cont2 = new Contact(LastName = 'cont2', AccountId = acc1.Id);
-        insert cont1;
-        insert cont2;
+        Contact con1 = new Contact(LastName = 'cont1', AccountId = acc1.Id);
+        Contact con2 = new Contact(LastName = 'cont2', AccountId = acc1.Id);
+        insert new List<Contact>{con1, con2};
 
-        Boutique_Resource__c teamMember1 = new Boutique_Resource__c(Name = 'teamMember1', Boutique__c = acc1.Id, Contact__c = cont1.Id);
-        Boutique_Resource__c teamMember2 = new Boutique_Resource__c(Name = 'teamMember2', Boutique__c = acc1.Id, Contact__c = cont2.Id);
-        insert teamMember1;
-        insert teamMember2;
+        insert new List<Boutique_Resource__c>{
+            new Boutique_Resource__c(Name = 'teamMember1', Boutique__c = acc1.Id, Contact__c = con1.Id),
+            new Boutique_Resource__c(Name = 'teamMember2', Boutique__c = acc1.Id, Contact__c = con2.Id)
+            };
     }
 
     @IsTest
@@ -32,15 +30,15 @@ public class ContactTriggerTest {
 
         List<Boutique_Resource__c> teamMembers = [SELECT id from Boutique_Resource__c WHERE Contact__c =:cont.Id];
 
-        System.assertEquals(1, teamMembers.size(), 'Do not create new team member');
+        Assert.areEqual(1, teamMembers.size(), 'Do not create new team member');
     }
 
     @IsTest
     static void updateTeamMemberTest(){
-
         List<Contact> contacts = [SELECT LastName, Id FROM Contact];
 
         for (Contact item: contacts){
+
             item.LastName = 'new name';
         }
 
@@ -57,12 +55,9 @@ public class ContactTriggerTest {
             if (item.Name == 'new name') {
 
                 teamMembers.add(item);
-
             }
-
         }
 
-        System.assertEquals(4, teamMembers.size(), 'Do not update name in Boutique Resource');
-
+        Assert.areEqual(4, teamMembers.size(), 'Do not update name in Boutique Resource');
     }
 }
