@@ -235,6 +235,17 @@
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
+    <listViews>
+        <fullName>Team_members</fullName>
+        <columns>NAME</columns>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Boutique_Resource__c.Team_Member</value>
+        </filters>
+        <label>Team members</label>
+    </listViews>
     <nameField>
         <label>Boutique Resource Name</label>
         <type>Text</type>
@@ -242,7 +253,7 @@
     <pluralLabel>Boutique Resource</pluralLabel>
     <recordTypes>
         <fullName>Location</fullName>
-        <active>false</active>
+        <active>true</active>
         <label>Location</label>
         <picklistValues>
             <picklist>Product_Family__c</picklist>
@@ -277,7 +288,7 @@
     </recordTypes>
     <recordTypes>
         <fullName>Purpose_of_Visit</fullName>
-        <active>false</active>
+        <active>true</active>
         <label>Purpose of Visit</label>
         <picklistValues>
             <picklist>Product_Family__c</picklist>

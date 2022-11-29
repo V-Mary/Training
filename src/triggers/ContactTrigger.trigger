@@ -4,6 +4,6 @@
 
 trigger ContactTrigger on Contact (after insert, after update ) {
 
-    ContactTriggerHandler.handler(Trigger.new, Trigger.newMap, Trigger.oldMap, Trigger.operationType);
+    ContactTriggerHandler.handler(Trigger.new, Trigger.oldMap, Trigger.newMap, Trigger.operationType);
 
 }

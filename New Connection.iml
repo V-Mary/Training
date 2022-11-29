@@ -35,6 +35,10 @@
                             <option name="name" value="Boutique_Resource__c" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Weather__c" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
                         </list>
                       </option>
                       <option name="name" value="CustomObject" />
