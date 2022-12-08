@@ -3,10 +3,9 @@
  */
 
 public with sharing class OpenWeatherController {
-
     public static String getWeatherByCityName (String cityName) {
         String urlData = 'data/2.5/weather?q='+cityName;
-        Map<String, String> apiKeyMap = new Map<String, String>{'x-api-key' => 'c840127ab41a64ffc77361a9d11b3ab3'};
+        Map<String, String> apiKeyMap = new Map<String, String>{'x-api-key' => '{!$Credential.Password}'};
 
         return HttpService.makeHttpRequest(
                 'callout:OpenWeatherNamedCredential', urlData, 'GET', apiKeyMap);
@@ -14,12 +13,12 @@ public with sharing class OpenWeatherController {
     }
 
     public static String getWeatherByCityId (String cityId) {
-        String callout = 'callout:OpenWeatherNamedCredential';
-        String urlData = 'data/2.5/weather?&id=702550';
-        String method = 'GET';
-        Map<String, String> apiKeyMap = new Map<String, String>{'x-api-key' => 'c840127ab41a64ffc77361a9d11b3ab3'};
+        String urlData = 'data/2.5/weather?id='+cityId;
+        Map<String, String> apiKeyMap = new Map<String, String>{'x-api-key' => '{!$Credential.Password}'};
 
-        return HttpService.makeHttpRequest(callout, urlData, method, apiKeyMap);
+        return HttpService.makeHttpRequest(
+                'callout:OpenWeatherNamedCredential', urlData, 'GET', apiKeyMap);
+
     }
 
     public static void saveWeather(String responseData){

@@ -2,7 +2,7 @@
  * Created by Mariya on 30.11.2022.
  */
 
-public with sharing class HttpService {
+public class HttpService {
 
     public static String makeHttpRequest(String callout, String urlData, String method, Map<String, String> apiKeyMap){
         HttpRequest req = new HttpRequest();
