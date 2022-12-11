@@ -149,213 +149,111 @@
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>false</enableReports>
-    <enableSearch>true</enableSearch>
+    <enableSearch>false</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
     <fields>
-        <fullName>Boutique__c</fullName>
-        <deleteConstraint>Restrict</deleteConstraint>
+        <fullName>Date_and_Time__c</fullName>
         <externalId>false</externalId>
-        <label>Boutique</label>
-        <referenceTo>Account</referenceTo>
-        <relationshipLabel>Boutique Resource</relationshipLabel>
-        <relationshipName>Boutique_Resource</relationshipName>
-        <required>true</required>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Contact__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <externalId>false</externalId>
-        <label>Contact</label>
-        <referenceTo>Contact</referenceTo>
-        <relationshipLabel>Boutique Resource</relationshipLabel>
-        <relationshipName>Boutique_Resource</relationshipName>
+        <label>Date and Time</label>
         <required>false</required>
         <trackTrending>false</trackTrending>
-        <type>Lookup</type>
+        <type>DateTime</type>
     </fields>
     <fields>
         <fullName>Description__c</fullName>
         <externalId>false</externalId>
         <label>Description</label>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>TextArea</type>
-    </fields>
-    <fields>
-        <fullName>Location__c</fullName>
-        <externalId>false</externalId>
-        <label>Location</label>
-        <length>18</length>
+        <length>200</length>
         <required>false</required>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Name__c</fullName>
+        <fullName>Humidity__c</fullName>
         <externalId>false</externalId>
-        <label>Name</label>
-        <length>18</length>
+        <label>Humidity</label>
+        <precision>18</precision>
         <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
-        <type>Text</type>
+        <type>Number</type>
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Product_Family__c</fullName>
+        <fullName>Max_Temperature__c</fullName>
         <externalId>false</externalId>
-        <label>Product Family</label>
+        <label>Max Temperature</label>
+        <precision>18</precision>
         <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-        <valueSet>
-            <restricted>true</restricted>
-            <valueSetName>Product_Family</valueSetName>
-        </valueSet>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Service__c</fullName>
+        <fullName>Min_Temperature__c</fullName>
         <externalId>false</externalId>
-        <label>Service</label>
+        <label>Min Temperature</label>
+        <precision>18</precision>
         <required>false</required>
+        <scale>0</scale>
         <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-        <valueSet>
-            <restricted>true</restricted>
-            <valueSetName>Service</valueSetName>
-        </valueSet>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
-    <label>Boutique Resource</label>
-    <listViews>
-        <fullName>All</fullName>
-        <filterScope>Everything</filterScope>
-        <label>All</label>
-    </listViews>
-    <listViews>
-        <fullName>Team_members</fullName>
-        <columns>NAME</columns>
-        <filterScope>Mine</filterScope>
-        <filters>
-            <field>RECORDTYPE</field>
-            <operation>equals</operation>
-            <value>Boutique_Resource__c.Team_Member</value>
-        </filters>
-        <label>Team members</label>
-    </listViews>
+    <fields>
+        <fullName>Pressure__c</fullName>
+        <externalId>false</externalId>
+        <label>Pressure</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Temp__c</fullName>
+        <externalId>false</externalId>
+        <label>Temperature</label>
+        <precision>18</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Visibility__c</fullName>
+        <externalId>false</externalId>
+        <label>Visibility</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Wind_Speed__c</fullName>
+        <externalId>false</externalId>
+        <label>Wind Speed</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Weather</label>
     <nameField>
-        <label>Boutique Resource Name</label>
+        <label>Weather Name</label>
         <type>Text</type>
     </nameField>
-    <pluralLabel>Boutique Resource</pluralLabel>
-    <recordTypes>
-        <fullName>Location</fullName>
-        <active>true</active>
-        <label>Location</label>
-        <picklistValues>
-            <picklist>Product_Family__c</picklist>
-            <values>
-                <fullName>Accessories</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Other Products</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Watches</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Service__c</picklist>
-            <values>
-                <fullName>Adjustment</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Other Services</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Watch Functional Check</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-    </recordTypes>
-    <recordTypes>
-        <fullName>Purpose_of_Visit</fullName>
-        <active>true</active>
-        <label>Purpose of Visit</label>
-        <picklistValues>
-            <picklist>Product_Family__c</picklist>
-            <values>
-                <fullName>Accessories</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Other Products</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Watches</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Service__c</picklist>
-            <values>
-                <fullName>Adjustment</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Other Services</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Watch Functional Check</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-    </recordTypes>
-    <recordTypes>
-        <fullName>Team_Member</fullName>
-        <active>true</active>
-        <label>Team Member</label>
-        <picklistValues>
-            <picklist>Product_Family__c</picklist>
-            <values>
-                <fullName>Accessories</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Other Products</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Watches</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Service__c</picklist>
-            <values>
-                <fullName>Adjustment</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Other Services</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Watch Functional Check</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-    </recordTypes>
+    <pluralLabel>Weather</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
