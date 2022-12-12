@@ -61,6 +61,7 @@ public with sharing class OpenWeatherDto {
         public Double speed;
         public Integer humidity;
         public Integer pressure;
+        public Integer dt;
         public wrapperData(fromJSON parseData){
             cls_main te = parseData.main;
             cls_wind w = parseData.wind;
@@ -71,6 +72,7 @@ public with sharing class OpenWeatherDto {
             this.humidity = te.humidity;
             this.pressure = te.pressure;
             this.speed = w.speed;
+            this.dt = parseData.dt;
         }
     }
 
