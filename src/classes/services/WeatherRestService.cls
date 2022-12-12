@@ -1,6 +1,3 @@
-/**
- * Created by Mariya on 12.12.2022.
- */
 @RestResource(urlMapping='/Weather/*')
 global with sharing class WeatherRestService {
 

@@ -32,6 +32,7 @@ public with sharing class OpenWeatherController {
         weatherRecord.Pressure__c = data.main.pressure ;
         weatherRecord.Temp__c = data.main.temp ;
         weatherRecord.Wind_Speed__c = data.wind.speed ;
+        weatherRecord.Date_and_Time__c = DateTime.newInstance(data.dt);
 
         insert weatherRecord;
     }
