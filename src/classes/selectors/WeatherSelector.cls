@@ -6,9 +6,17 @@ public inherited sharing class WeatherSelector {
 
     public static List<Weather__c> getById(String id) {
         return [
-                SELECT Name, Date_and_Time__c, Pressure__c, Humidity__c, Temp__c, Min_Temperature__c, Max_Temperature__c
+                SELECT Name, Date_and_Time__c, Pressure__c, Humidity__c, Temp__c, Min_Temperature__c, Max_Temperature__c, CityId__c
                 FROM Weather__c
                 WHERE Id = :id
+        ];
+    }
+
+    public static List<Weather__c> getWeatherByCityId(String cityId) {
+        return [
+                SELECT Name, Date_and_Time__c, Pressure__c, Humidity__c, Temp__c, Min_Temperature__c, Max_Temperature__c, CityId__c
+                FROM Weather__c
+                WHERE CityId__c = :cityId
         ];
     }
 

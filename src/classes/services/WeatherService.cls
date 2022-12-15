@@ -26,16 +26,14 @@ public with sharing class WeatherService {
     class GetWeatherById implements WeatherRestCall {
         public String handle(RestRequest request) {
             String weatherId = request.params.get('id');
-            return JSON.serialize(WeatherSelector.getById(weatherId));
+            return JSON.serialize(WeatherSelector.getWeatherByCityId(weatherId));
         }
     }
 
     class PostWeather implements WeatherRestCall {
         public String handle(RestRequest request) {
-            String weatherName = request.params.get('name');
-            String weatherTemp = request.params.get('temp');
-            String weatherWindSpeed = request.params.get('speed');
-            Weather__c newWeather = new Weather__c(Name = weatherName, Temp__c = Integer.valueOf(weatherTemp), Wind_Speed__c = Integer.valueOf(weatherWindSpeed));
+            WeatherDto weather = (WeatherDto) JSON.deserialize(request.requestBody.toString(), WeatherDto.class);
+            Weather__c newWeather = weather.createWeather();
             insert newWeather;
             return JSON.serialize(newWeather);
         }
@@ -43,19 +41,18 @@ public with sharing class WeatherService {
 
     class PatchWeather implements WeatherRestCall {
         public String handle(RestRequest request) {
-            String weatherId = request.params.get('id');
-            String weatherTemp = request.params.get('temp');
-            List<Weather__c> weathers = WeatherSelector.getById(weatherId);
-            weathers.get(0).Temp__c = Integer.valueOf(weatherTemp);
-            update weathers;
-            return JSON.serialize(weathers);
+            WeatherDto weatherDto = (WeatherDto) JSON.deserialize(request.requestBody.toString(), WeatherDto.class);
+            Weather__c weather = weatherDto.updateWeather();
+            upsert weather CityId__c;
+            return JSON.serialize(weather);
+
         }
     }
 
     class DeleteWeather implements WeatherRestCall {
         public String handle(RestRequest request) {
             String weatherId = request.params.get('id');
-            List<Weather__c> weatherToDelete = WeatherSelector.getById(weatherId);
+            List<Weather__c> weatherToDelete = WeatherSelector.getWeatherByCityId(weatherId);
             delete weatherToDelete;
             return JSON.serialize('Weather deleted successfully');
         }

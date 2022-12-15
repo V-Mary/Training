@@ -6,33 +6,53 @@ global with sharing class WeatherRestService {
 
     @HttpGet
     global static void getWeather() {
+        Logger logger = new Logger();
         RestResponse res = RestContext.response;
-        String body = WeatherService.handleRequest(RestContext.request);
-        res.statusCode = 200;
-        res.responseBody = Blob.valueOf(body);
+        try {
+            String body = WeatherService.handleRequest(RestContext.request);
+            res.statusCode = 200;
+            res.responseBody = Blob.valueOf(body);
+        } catch (Exception e) {
+            logger.createErrorLog('API', 'WeatherRestService', e);
+        }
     }
 
     @HttpDelete
-    global static void deleteById() {
+    global static void deleteWeather() {
+        Logger logger = new Logger();
         RestResponse res = RestContext.response;
-        String body = WeatherService.handleRequest(RestContext.request);
-        res.statusCode = 200;
-        res.responseBody = Blob.valueOf(body);
+        try {
+            String body = WeatherService.handleRequest(RestContext.request);
+            res.statusCode = 200;
+            res.responseBody = Blob.valueOf(body);
+        } catch (Exception e) {
+            logger.createErrorLog('API', 'WeatherRestService', e);
+        }
     }
 
     @HttpPost
-    global static void postById() {
+    global static void createWeather() {
+        Logger logger = new Logger();
         RestResponse res = RestContext.response;
-        String body = WeatherService.handleRequest(RestContext.request);
-        res.statusCode = 200;
-        res.responseBody = Blob.valueOf(body);
+        try {
+            String body = WeatherService.handleRequest(RestContext.request);
+            res.statusCode = 200;
+            res.responseBody = Blob.valueOf(body);
+        } catch (Exception e) {
+            logger.createErrorLog('API', 'WeatherRestService', e);
+        }
     }
 
     @HttpPatch
-    global static void patchById() {
+    global static void updateWeather() {
+        Logger logger = new Logger();
         RestResponse res = RestContext.response;
-        String body = WeatherService.handleRequest(RestContext.request);
-        res.statusCode = 200;
-        res.responseBody = Blob.valueOf(body);
+        try {
+            String body = WeatherService.handleRequest(RestContext.request);
+            res.statusCode = 200;
+            res.responseBody = Blob.valueOf(body);
+        } catch (Exception e) {
+            logger.createErrorLog('API', 'WeatherRestService', e);
+        }
     }
 }
