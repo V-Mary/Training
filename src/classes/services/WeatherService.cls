@@ -41,11 +41,11 @@ public with sharing class WeatherService {
 
     class PatchWeather implements WeatherRestCall {
         public String handle(RestRequest request) {
+            System.debug(request.requestBody.toString());
             WeatherDto weatherDto = (WeatherDto) JSON.deserialize(request.requestBody.toString(), WeatherDto.class);
             Weather__c weather = weatherDto.updateWeather();
             upsert weather CityId__c;
             return JSON.serialize(weather);
-
         }
     }
 
@@ -53,6 +53,9 @@ public with sharing class WeatherService {
         public String handle(RestRequest request) {
             String weatherId = request.params.get('id');
             List<Weather__c> weatherToDelete = WeatherSelector.getWeatherByCityId(weatherId);
+            if (weatherToDelete.isEmpty()) {
+                return JSON.serialize('No data found');
+            }
             delete weatherToDelete;
             return JSON.serialize('Weather deleted successfully');
         }
