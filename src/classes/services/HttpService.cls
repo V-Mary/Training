@@ -4,12 +4,12 @@
 
 public class HttpService {
 
-    public static HTTPResponse makeHttpRequest(String callout, String urlData, String method, Map<String, String> apiKeyMap){
+    public static HTTPResponse makeHttpRequest(String endpoint, String method, Map<String, String> apiKeyMap) {
         HttpRequest req = new HttpRequest();
         req.setMethod(method);
-        req.setEndpoint(callout+urlData);
+        req.setEndpoint(endpoint);
 
-        for(String keyMap: apiKeyMap.keySet()){
+        for (String keyMap : apiKeyMap.keySet()) {
             req.setHeader(keyMap, apiKeyMap.get(keyMap));
         }
 

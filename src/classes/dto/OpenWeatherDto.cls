@@ -4,7 +4,7 @@
 
 public with sharing class OpenWeatherDto {
 
-    public class fromJSON{
+    public class fromJSON {
         public cls_coord coord;
         public cls_weather[] weather;
         public String base;
@@ -53,7 +53,7 @@ public with sharing class OpenWeatherDto {
         public Integer sunset;
     }
 
-    public class wrapperData{
+    public class wrapperData {
         public String name;
         public Double temp;
         public Double temp_min;
@@ -62,7 +62,7 @@ public with sharing class OpenWeatherDto {
         public Integer humidity;
         public Integer pressure;
         public Integer dt;
-        public wrapperData(fromJSON parseData){
+        public wrapperData(fromJSON parseData) {
             cls_main te = parseData.main;
             cls_wind w = parseData.wind;
             this.name = parseData.name;
