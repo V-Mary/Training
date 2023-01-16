@@ -187,7 +187,7 @@
 
         Assert.areEqual(200, res.statusCode);
         Assert.areEqual(1, weathers.size());
-        Assert.areEqual('"Wrong id"', res.responseBody.toString());
+        Assert.areEqual('"No data found."', res.responseBody.toString());
     }
 
     @IsTest private static void updateWeatherTest() {

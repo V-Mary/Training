@@ -53,8 +53,8 @@ public with sharing class WeatherService {
         public String handle(RestRequest request) {
             String weatherId = request.params.get('id');
             List<Weather__c> weatherToDelete = WeatherSelector.getWeatherByCityId(weatherId);
-            if (weatherToDelete.size() == 0) {
-                return JSON.serialize('Wrong id');
+            if (weatherToDelete.isEmpty()) {
+                return JSON.serialize('No data found');
             }
             delete weatherToDelete;
             return JSON.serialize('Weather deleted successfully');
