@@ -162,7 +162,7 @@
 
         Assert.areEqual(200, res.statusCode);
         Assert.areEqual(0, weathers.size());
-        Assert.areEqual('"Weather deleted successfully"', res.responseBody.toString());
+        Assert.areEqual('Weather deleted successfully', res.responseBody.toString());
     }
 
     @IsTest private static void deleteWeatherNegativeTest() {
@@ -187,7 +187,7 @@
 
         Assert.areEqual(200, res.statusCode);
         Assert.areEqual(1, weathers.size());
-        Assert.areEqual('"No data found."', res.responseBody.toString());
+        Assert.areEqual('No data found.', res.responseBody.toString());
     }
 
     @IsTest private static void updateWeatherTest() {
