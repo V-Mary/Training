@@ -5,7 +5,7 @@
 public with sharing class Logger {
     public List<Log__c> logs = new List<Log__c>();
 
-    public void createErrorLog(String summary, String className, Exception e) {
+    public void logError(String summary, String className, Exception e) {
         this.logs.add(
                 new Log__c(
                         Name = className,
@@ -19,7 +19,7 @@ public with sharing class Logger {
         );
     }
 
-    public void createSuccessLog(String summary, String className){
+    public void logSuccess(String summary, String className) {
         this.logs.add(
                 new Log__c(
                         Name = className,

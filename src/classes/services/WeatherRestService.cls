@@ -12,9 +12,9 @@ global with sharing class WeatherRestService {
             String body = WeatherService.handleRequest(RestContext.request);
             res.statusCode = 200;
             res.responseBody = Blob.valueOf(body);
-            logger.createSuccessLog('API', 'WeatherRestService');
+            logger.logSuccess('API', 'WeatherRestService');
         } catch (Exception e) {
-            logger.createErrorLog('API', 'WeatherRestService', e);
+            logger.logError('API', 'WeatherRestService', e);
             res.statusCode = 500;
         } finally {
             logger.flush();
@@ -29,9 +29,9 @@ global with sharing class WeatherRestService {
             String body = WeatherService.handleRequest(RestContext.request);
             res.statusCode = 200;
             res.responseBody = Blob.valueOf(body);
-            logger.createSuccessLog('API', 'WeatherRestService');
+            logger.logSuccess('API', 'WeatherRestService');
         } catch (Exception e) {
-            logger.createErrorLog('API', 'WeatherRestService', e);
+            logger.logError('API', 'WeatherRestService', e);
             res.statusCode = 500;
         } finally {
             logger.flush();
@@ -46,9 +46,9 @@ global with sharing class WeatherRestService {
             String body = WeatherService.handleRequest(RestContext.request);
             res.statusCode = 200;
             res.responseBody = Blob.valueOf(body);
-            logger.createSuccessLog('API', 'WeatherRestService');
+            logger.logSuccess('API', 'WeatherRestService');
         } catch (Exception e) {
-            logger.createErrorLog('API', 'WeatherRestService', e);
+            logger.logError('API', 'WeatherRestService', e);
             res.statusCode = 500;
         } finally {
             logger.flush();
@@ -63,9 +63,9 @@ global with sharing class WeatherRestService {
             String body = WeatherService.handleRequest(RestContext.request);
             res.statusCode = 200;
             res.responseBody = Blob.valueOf(body);
-            logger.createSuccessLog('API', 'WeatherRestService');
+            logger.logSuccess('API', 'WeatherRestService');
         } catch (Exception e) {
-            logger.createErrorLog('API', 'WeatherRestService', e);
+            logger.logError('API', 'WeatherRestService', e);
             res.statusCode = 500;
         } finally {
             logger.flush();
