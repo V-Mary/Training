@@ -9,7 +9,7 @@ public with sharing class MinAccountOppBatch implements Database.Batchable<sObje
     private List<Opportunity> opportunitiesToSum = new List<Opportunity>();
 
     public Iterable<sObject> start(Database.BatchableContext param1) {
-        return Database.getQueryLocator('SELECT Id, Name, (SELECT Amount FROM Opportunities) FROM Account WHERE Id in (SELECT AccountId FROM Opportunity)');
+        return Database.getQueryLocator('SELECT Id, Name, (SELECT Amount FROM Opportunities) FROM Account WHERE Id in (SELECT AccountId FROM Opportunity WHERE Amount != null)');
     }
 
 
@@ -19,7 +19,6 @@ public with sharing class MinAccountOppBatch implements Database.Batchable<sObje
             this.logger = new Logger();
 
             for (Account acc : accounts) {
-                System.debug(acc);
                 Opportunity minOpp = acc.Opportunities[0];
 
                 for (Opportunity opp : acc.Opportunities) {
