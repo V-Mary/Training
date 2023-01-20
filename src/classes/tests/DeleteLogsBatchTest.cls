@@ -19,7 +19,7 @@ private class DeleteLogsBatchTest {
         Test.setCreatedDate(log.Id, System.now().addDays(-10));
 
         Test.startTest();
-        DeleteLogsBatch batch = new DeleteLogsBatch();
+        DeleteLogsBatch batch = new DeleteLogsBatch(7);
         Database.executeBatch(batch);
         Test.stopTest();
 

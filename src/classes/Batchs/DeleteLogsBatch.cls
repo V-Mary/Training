@@ -5,9 +5,14 @@
 public with sharing class DeleteLogsBatch implements Database.Batchable<sObject>, Schedulable, Database.Stateful {
 
     private Logger logger;
+    private Integer daysAgo;
+
+    public DeleteLogsBatch(Integer daysAgo){
+        this.daysAgo = daysAgo;
+    }
 
     public Iterable<sObject> start(Database.BatchableContext param1) {
-        return Database.getQueryLocator('SELECT CreatedDate FROM Log__c WHERE CreatedDate < N_DAYS_AGO:7');
+        return Database.getQueryLocator('SELECT CreatedDate FROM Log__c WHERE CreatedDate < N_DAYS_AGO:'+this.daysAgo);
     }
 
     public void execute(Database.BatchableContext param1, List<Log__c> logs) {
@@ -28,7 +33,7 @@ public with sharing class DeleteLogsBatch implements Database.Batchable<sObject>
     }
 
     public void execute(SchedulableContext param1) {
-        DeleteLogsBatch deleteLogsBatch = new DeleteLogsBatch();
+        DeleteLogsBatch deleteLogsBatch = new DeleteLogsBatch(7);
         Id batchId = Database.executeBatch(deleteLogsBatch);
     }
 }
