@@ -7,12 +7,12 @@ public with sharing class DeleteLogsBatch implements Database.Batchable<sObject>
     private Logger logger;
     private Integer daysAgo;
 
-    public DeleteLogsBatch(Integer daysAgo){
+    public DeleteLogsBatch(Integer daysAgo) {
         this.daysAgo = daysAgo;
     }
 
     public Iterable<sObject> start(Database.BatchableContext param1) {
-        return Database.getQueryLocator('SELECT CreatedDate FROM Log__c WHERE CreatedDate < N_DAYS_AGO:'+this.daysAgo);
+        return Database.getQueryLocator('SELECT CreatedDate FROM Log__c WHERE CreatedDate < N_DAYS_AGO:' + this.daysAgo);
     }
 
     public void execute(Database.BatchableContext param1, List<Log__c> logs) {
