@@ -4,10 +4,10 @@
 
 public with sharing class BoutiqueResourceService {
 
-    public static final String phonePattern = '[0-9]{10}';
+    public static final String WORK_PHONE_PATTERN = '[0-9]{10}';
 
     public static Boolean isPhoneNumberValid(String phoneNumber) {
-        return String.isNotBlank(phoneNumber) && Pattern.matches(phonePattern, phoneNumber);
+        return String.isNotBlank(phoneNumber) && Pattern.matches(WORK_PHONE_PATTERN, phoneNumber);
     }
 
     public static void formatWorkPhone(List<Boutique_Resource__c> newBoutiques) {
