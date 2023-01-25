@@ -4,19 +4,26 @@
 
 public with sharing class BoutiqueResourceService {
 
+    public static Boolean isPhoneNumberValid(String phoneNumber) {
+        if (phoneNumber.length() != 10 || !phoneNumber.isNumeric() || String.isBlank(phoneNumber)) {
+            return false;
+        }
+        return true;
+    }
+
     public static void formatWorkPhone(List<Boutique_Resource__c> newBoutiques) {
 
         for (Boutique_Resource__c item : newBoutiques) {
 
-            if (String.isNotBlank(item.Work_Phone__c)) {
+            if (item.RecordTypeId == ContactUtility.getTeamMemberRTId()) {
 
-                if (item.Work_Phone__c.length() < 1 || item.Work_Phone__c.length() > 10 || !item.Work_Phone__c.isNumeric()) {
-                    item.addError('Please, enter 10 numbers!');
+                if (!isPhoneNumberValid(item.Work_Phone__c)) {
+                    item.addError('Phone number is not valid.');
                 }
 
-                String formatedPhone = '(' + item.Work_Phone__c.substring(0, 3) + ') ' + item.Work_Phone__c.substring(3, 6) + '-' + item.Work_Phone__c.substring(6, 10);
-
-                item.Work_Phone__c = formatedPhone;
+                item.Work_Phone__c = String.format('({0}) {1}-{2}', new List<String>{
+                        item.Work_Phone__c.substring(0, 3), item.Work_Phone__c.substring(3, 6), item.Work_Phone__c.substring(6, 10)
+                });
             }
         }
     }
