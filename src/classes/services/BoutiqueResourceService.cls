@@ -5,9 +5,15 @@
 public with sharing class BoutiqueResourceService {
 
     public static Boolean isPhoneNumberValid(String phoneNumber) {
-        if (phoneNumber.length() != 10 || !phoneNumber.isNumeric() || String.isBlank(phoneNumber)) {
+
+        Pattern phonePattern = Pattern.compile('[0-9]{10}');
+
+        Matcher phoneMatcher = phonePattern.matcher(phoneNumber);
+
+        if (!phoneMatcher.matches()) {
             return false;
         }
+
         return true;
     }
 
@@ -19,11 +25,11 @@ public with sharing class BoutiqueResourceService {
 
                 if (!isPhoneNumberValid(item.Work_Phone__c)) {
                     item.addError('Phone number is not valid.');
+                } else {
+                    item.Work_Phone__c = String.format('({0}) {1}-{2}', new List<String>{
+                            item.Work_Phone__c.substring(0, 3), item.Work_Phone__c.substring(3, 6), item.Work_Phone__c.substring(6, 10)
+                    });
                 }
-
-                item.Work_Phone__c = String.format('({0}) {1}-{2}', new List<String>{
-                        item.Work_Phone__c.substring(0, 3), item.Work_Phone__c.substring(3, 6), item.Work_Phone__c.substring(6, 10)
-                });
             }
         }
     }
