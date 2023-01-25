@@ -5,16 +5,7 @@
 public with sharing class BoutiqueResourceService {
 
     public static Boolean isPhoneNumberValid(String phoneNumber) {
-
-        Pattern phonePattern = Pattern.compile('[0-9]{10}');
-
-        Matcher phoneMatcher = phonePattern.matcher(phoneNumber);
-
-        if (!phoneMatcher.matches()) {
-            return false;
-        }
-
-        return true;
+        return (String.isNotBlank(phoneNumber) && Pattern.matches('[0-9]{10}', phoneNumber));
     }
 
     public static void formatWorkPhone(List<Boutique_Resource__c> newBoutiques) {
