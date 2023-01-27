@@ -12,32 +12,46 @@ public inherited sharing class CaseService {
         return caseRecord.RecordTypeId == CaseUtility.getAppointmentRequestRTId();
     }
 
-    public static void createAppointmentResources(List<Case> newCases, Map<Id, Case> oldCasesByIds) {
+    private static Boolean isTeamMemberRT(Boutique_Resource__c boutiqueResource) {
+        return boutiqueResource.RecordTypeId == ContactUtility.getTeamMemberRTId();
+    }
 
-        List<Case> casesWithNewOwnerId = new List<Case>();
+    public static Map<Id, Case> getCasesWithNewOwnerByOwnerIds(List<Case> newCases, Map<Id, Case> oldCasesByIds) {
 
-        Set<Id> caseOwnerIds = new Set<Id>();
+        Map<Id, Case> filteredCasesByOwnerIds = new Map<Id, Case>();
 
         for (Case updatedCase : newCases) {
             if (isOwnerChanged(updatedCase, oldCasesByIds.get(updatedCase.Id)) && isAppointmentRequestRT(updatedCase)) {
-                casesWithNewOwnerId.add(updatedCase);
-                caseOwnerIds.add(updatedCase.OwnerId);
+                filteredCasesByOwnerIds.put(updatedCase.OwnerId, updatedCase);
             }
         }
 
+        return filteredCasesByOwnerIds;
+    }
+
+    public static void createAppointmentResources(List<Case> newCases, Map<Id, Case> oldCasesByIds) {
+
+        Map<Id, Case> filteredCasesByOwnerIds = getCasesWithNewOwnerByOwnerIds(newCases, oldCasesByIds);
+
         List<Appointment_Resource__c> appointmentResources = new List<Appointment_Resource__c>();
 
-        List<Boutique_Resource__c> boutiqueResources = BoutiqueResourceSelector.getBoutiqueResourceByContactOwnerIds(caseOwnerIds);
+        Map<Id, Boutique_Resource__c> boutiqueResourcesByUserIds = new Map<Id, Boutique_Resource__c>();
 
-        for (Case caseToUpdate : casesWithNewOwnerId) {
-            for (Boutique_Resource__c boutiqueResource : boutiqueResources) {
-                if (boutiqueResource.User__c == caseToUpdate.OwnerId) {
-                    appointmentResources.add(new Appointment_Resource__c(Boutique_Resource__c = boutiqueResource.Id, Appointment__c = caseToUpdate.Id));
-                }
+        for (Boutique_Resource__c boutiqueResource : BoutiqueResourceSelector.getBoutiqueResourceByUserIds(filteredCasesByOwnerIds.keySet())) {
+            if (isTeamMemberRT(boutiqueResource)) {
+                boutiqueResourcesByUserIds.put(boutiqueResource.User__c, boutiqueResource);
             }
+        }
 
-            if (caseToUpdate.Status != CaseUtility.ASSIGNED_STATUS) {
-                caseToUpdate.Status = CaseUtility.ASSIGNED_STATUS;
+        for (Id caseOwnerId : filteredCasesByOwnerIds.keySet()) {
+            if (boutiqueResourcesByUserIds.containsKey(caseOwnerId)) {
+                appointmentResources.add(new Appointment_Resource__c(
+                        Boutique_Resource__c = boutiqueResourcesByUserIds.get(caseOwnerId).Id,
+                        Appointment__c = filteredCasesByOwnerIds.get(caseOwnerId).Id));
+
+                if (filteredCasesByOwnerIds.get(caseOwnerId).Status != CaseUtility.ASSIGNED_STATUS) {
+                    filteredCasesByOwnerIds.get(caseOwnerId).Status = CaseUtility.ASSIGNED_STATUS;
+                }
             }
         }
 
