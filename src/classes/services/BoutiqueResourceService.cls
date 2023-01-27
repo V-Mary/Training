@@ -4,7 +4,11 @@
 
 public with sharing class BoutiqueResourceService {
 
-    public static final String WORK_PHONE_PATTERN = '[0-9]{10}';
+    public static Boolean isTeamMemberRT(Boutique_Resource__c boutiqueResource) {
+        return boutiqueResource.RecordTypeId == ContactUtility.getTeamMemberRTId();
+    }
+
+    private static final String WORK_PHONE_PATTERN = '[0-9]{10}';
 
     public static Boolean isPhoneNumberValid(String phoneNumber) {
         return String.isNotBlank(phoneNumber) && Pattern.matches(WORK_PHONE_PATTERN, phoneNumber);

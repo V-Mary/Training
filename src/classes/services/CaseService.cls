@@ -16,10 +16,6 @@ public inherited sharing class CaseService {
         return caseRecord.RecordTypeId == CaseUtility.getAppointmentRequestRTId();
     }
 
-    public static Boolean isTeamMemberRT(Boutique_Resource__c boutiqueResource) {
-        return boutiqueResource.RecordTypeId == ContactUtility.getTeamMemberRTId();
-    }
-
     private static Map<Id, Case> getCasesWithNewOwnerByOwnerIds(List<Case> newCases, Map<Id, Case> oldCasesByIds) {
 
         Map<Id, Case> filteredCasesByOwnerIds = new Map<Id, Case>();
@@ -42,7 +38,7 @@ public inherited sharing class CaseService {
         Map<Id, Boutique_Resource__c> boutiqueResourcesByUserIds = new Map<Id, Boutique_Resource__c>();
 
         for (Boutique_Resource__c boutiqueResource : BoutiqueResourceSelector.getBoutiqueResourceByUserIds(filteredCasesByOwnerIds.keySet())) {
-            if (isTeamMemberRT(boutiqueResource)) {
+            if (BoutiqueResourceService.isTeamMemberRT(boutiqueResource)) {
                 boutiqueResourcesByUserIds.put(boutiqueResource.User__c, boutiqueResource);
             }
         }
