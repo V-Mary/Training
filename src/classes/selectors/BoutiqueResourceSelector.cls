@@ -7,4 +7,8 @@ public inherited sharing class BoutiqueResourceSelector {
     public static List<Boutique_Resource__c> getBoutiqueResourceByContactIds(Set<Id> contactIds) {
         return [SELECT Name, Boutique__c, Contact__c FROM Boutique_Resource__c WHERE Contact__c IN :contactIds];
     }
+
+    public static List<Boutique_Resource__c> getBoutiqueResourceByContactOwnerIds(Set<Id> ownerIds) {
+        return [SELECT User__c, Id FROM Boutique_Resource__c WHERE User__c IN :ownerIds];
+    }
 }

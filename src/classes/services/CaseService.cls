@@ -4,32 +4,30 @@
 
 public inherited sharing class CaseService {
 
-    public static List<Case> getCasesWithNewOwnerId(List<Case> newCases, Map<Id, Case> oldCasesByIds) {
+    private static Boolean isOwnerChanged(Case newCase, Case oldCase) {
+        return newCase.OwnerId != oldCase.OwnerId;
+    }
 
-        List<Case> casesWithNewOwnerId = new List<Case>();
-
-        for (Case updatedCase : newCases) {
-            if (updatedCase.OwnerId != oldCasesByIds.get(updatedCase.Id).OwnerId) {
-                casesWithNewOwnerId.add(updatedCase);
-            }
-        }
-
-        return casesWithNewOwnerId;
+    private static Boolean isAppointmentRequestRT(Case caseRecord) {
+        return caseRecord.RecordTypeId == CaseUtility.getAppointmentRequestRTId();
     }
 
     public static void createAppointmentResources(List<Case> newCases, Map<Id, Case> oldCasesByIds) {
 
-        List<Case> casesWithNewOwnerId = getCasesWithNewOwnerId(newCases, oldCasesByIds);
+        List<Case> casesWithNewOwnerId = new List<Case>();
 
         Set<Id> caseOwnerIds = new Set<Id>();
 
-        List<Appointment_Resource__c> appointmentResources = new List<Appointment_Resource__c>();
-
-        for (Case updatedCase : casesWithNewOwnerId) {
-            caseOwnerIds.add(updatedCase.OwnerId);
+        for (Case updatedCase : newCases) {
+            if (isOwnerChanged(updatedCase, oldCasesByIds.get(updatedCase.Id)) && isAppointmentRequestRT(updatedCase)) {
+                casesWithNewOwnerId.add(updatedCase);
+                caseOwnerIds.add(updatedCase.OwnerId);
+            }
         }
 
-        List<Boutique_Resource__c> boutiqueResources = [SELECT Id, User__c FROM Boutique_Resource__c WHERE User__c IN :caseOwnerIds];
+        List<Appointment_Resource__c> appointmentResources = new List<Appointment_Resource__c>();
+
+        List<Boutique_Resource__c> boutiqueResources = BoutiqueResourceSelector.getBoutiqueResourceByContactOwnerIds(caseOwnerIds);
 
         for (Case caseToUpdate : casesWithNewOwnerId) {
             for (Boutique_Resource__c boutiqueResource : boutiqueResources) {
@@ -38,8 +36,8 @@ public inherited sharing class CaseService {
                 }
             }
 
-            if (caseToUpdate.Status != 'Assigned') {
-                caseToUpdate.Status = 'Assigned';
+            if (caseToUpdate.Status != CaseUtility.ASSIGNED_STATUS) {
+                caseToUpdate.Status = CaseUtility.ASSIGNED_STATUS;
             }
         }
 
