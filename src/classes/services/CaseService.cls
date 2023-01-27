@@ -37,6 +37,8 @@ public inherited sharing class CaseService {
 
         Map<Id, Boutique_Resource__c> boutiqueResourcesByUserIds = new Map<Id, Boutique_Resource__c>();
 
+        List<Case> casesToUpdate = new List<Case>();
+
         for (Boutique_Resource__c boutiqueResource : BoutiqueResourceSelector.getBoutiqueResourceByUserIds(filteredCasesByOwnerIds.keySet())) {
             if (BoutiqueResourceService.isTeamMemberRT(boutiqueResource)) {
                 boutiqueResourcesByUserIds.put(boutiqueResource.User__c, boutiqueResource);
@@ -44,17 +46,18 @@ public inherited sharing class CaseService {
         }
 
         for (Id caseOwnerId : filteredCasesByOwnerIds.keySet()) {
-            if (boutiqueResourcesByUserIds.containsKey(caseOwnerId)) {
-                appointmentResources.add(new Appointment_Resource__c(
-                        Boutique_Resource__c = boutiqueResourcesByUserIds.get(caseOwnerId).Id,
-                        Appointment__c = filteredCasesByOwnerIds.get(caseOwnerId).Id));
+            appointmentResources.add(new Appointment_Resource__c(
+                    Boutique_Resource__c = boutiqueResourcesByUserIds.get(caseOwnerId).Id,
+                    Appointment__c = filteredCasesByOwnerIds.get(caseOwnerId).Id));
 
-                if (!isCaseStatusAssigned(filteredCasesByOwnerIds.get(caseOwnerId))) {
-                    filteredCasesByOwnerIds.get(caseOwnerId).Status = CaseUtility.ASSIGNED_STATUS;
-                }
+            if (!isCaseStatusAssigned(filteredCasesByOwnerIds.get(caseOwnerId))) {
+                Case caseToUpdate = [SELECT Id, Status FROM Case WHERE Id = :filteredCasesByOwnerIds.get(caseOwnerId).Id];
+                caseToUpdate.Status = CaseUtility.ASSIGNED_STATUS;
+                casesToUpdate.add(caseToUpdate);
             }
         }
 
         insert appointmentResources;
+        update casesToUpdate;
     }
 }
