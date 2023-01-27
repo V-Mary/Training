@@ -4,19 +4,23 @@
 
 public inherited sharing class CaseService {
 
-    private static Boolean isOwnerChanged(Case newCase, Case oldCase) {
+    public static Boolean isOwnerChanged(Case newCase, Case oldCase) {
         return newCase.OwnerId != oldCase.OwnerId;
     }
 
-    private static Boolean isAppointmentRequestRT(Case caseRecord) {
+    public static Boolean isCaseStatusAssigned(Case caseRecord) {
+        return caseRecord.Status == CaseUtility.ASSIGNED_STATUS;
+    }
+
+    public static Boolean isAppointmentRequestRT(Case caseRecord) {
         return caseRecord.RecordTypeId == CaseUtility.getAppointmentRequestRTId();
     }
 
-    private static Boolean isTeamMemberRT(Boutique_Resource__c boutiqueResource) {
+    public static Boolean isTeamMemberRT(Boutique_Resource__c boutiqueResource) {
         return boutiqueResource.RecordTypeId == ContactUtility.getTeamMemberRTId();
     }
 
-    public static Map<Id, Case> getCasesWithNewOwnerByOwnerIds(List<Case> newCases, Map<Id, Case> oldCasesByIds) {
+    private static Map<Id, Case> getCasesWithNewOwnerByOwnerIds(List<Case> newCases, Map<Id, Case> oldCasesByIds) {
 
         Map<Id, Case> filteredCasesByOwnerIds = new Map<Id, Case>();
 
@@ -49,7 +53,7 @@ public inherited sharing class CaseService {
                         Boutique_Resource__c = boutiqueResourcesByUserIds.get(caseOwnerId).Id,
                         Appointment__c = filteredCasesByOwnerIds.get(caseOwnerId).Id));
 
-                if (filteredCasesByOwnerIds.get(caseOwnerId).Status != CaseUtility.ASSIGNED_STATUS) {
+                if (!isCaseStatusAssigned(filteredCasesByOwnerIds.get(caseOwnerId))) {
                     filteredCasesByOwnerIds.get(caseOwnerId).Status = CaseUtility.ASSIGNED_STATUS;
                 }
             }
