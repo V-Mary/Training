@@ -57,7 +57,7 @@ public inherited sharing class CaseService {
             }
         }
 
-        insert appointmentResources;
         update casesToUpdate;
+        insert appointmentResources;
     }
 }
