@@ -24,12 +24,8 @@ public with sharing class AppointmentResourceService {
 
         List<Messaging.SingleEmailMessage> messages = new List<Messaging.SingleEmailMessage>();
 
-        List<Appointment_Resource__c> appointmentResources = [
-                SELECT Id, Appointment__r.Status, Appointment__r.OwnerId
-                FROM Appointment_Resource__c
-                WHERE Id IN :appointmentResourcesByIds.keySet()
-                AND Appointment__r.Status = :CaseUtility.ASSIGNED_STATUS
-        ];
+        List<Appointment_Resource__c> appointmentResources =
+                AppointmentResourcesSelector.getAppointmentResourcesByIdsWithAssignedStatus(appointmentResourcesByIds.keySet());
 
         for (Appointment_Resource__c appointmentResource : appointmentResources) {
             Messaging.SingleEmailMessage message = getSingleEmailMessageForCase(
