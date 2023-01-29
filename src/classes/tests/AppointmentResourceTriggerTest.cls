@@ -4,7 +4,7 @@
 
 @IsTest public with sharing class AppointmentResourceTriggerTest {
 
-    @TestSetup private static void makeDate() {
+    @TestSetup private static void makeData() {
 
         Account acc = new Account(Name = 'acc');
         insert acc;
