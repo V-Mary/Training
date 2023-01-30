@@ -12,22 +12,22 @@
                 EmailEncodingKey = 'UTF-8', LastName = 'Testing', LanguageLocaleKey = 'en_US',
                 LocaleSidKey = 'en_US', ProfileId = p.Id,
                 TimeZoneSidKey = 'America/Los_Angeles',
-                UserName = uniqueUserName);
-
+                UserName = uniqueUserName, External_Id__c = 'standt');
+        insert user1;
 
         Account acc = new Account(Name = 'acc');
         insert acc;
 
-        Contact con = new Contact(LastName = 'con', AccountId = acc.Id);
+        Contact con = new Contact(LastName = 'con', External_Id__c = 'con');
+        insert con;
 
         insert new Case(RecordTypeId = CaseUtility.getAppointmentRequestRTId(),
                 Appointment_Date__c = Date.newInstance(2023, 02, 02),
                 Start_Time__c = Time.newInstance(1, 2, 3, 4), Status = 'New');
 
-        System.runAs(user1) {
-            insert new Boutique_Resource__c(Name = 'teamMember1', Boutique__c = acc.Id, Contact__c = con.Id,
-                    RecordTypeId = ContactUtility.getTeamMemberRTId(), Work_Phone__c = '1234567890', User__c = user1.Id);
-        }
+        insert new Boutique_Resource__c(Name = 'teamMember1', Boutique__c = acc.Id, Contact__c = con.Id,
+                RecordTypeId = ContactUtility.getTeamMemberRTId(), Work_Phone__c = '1234567890', User__c = user1.Id);
+
     }
 
     @IsTest private static void createAppointmentResourcesTest() {
