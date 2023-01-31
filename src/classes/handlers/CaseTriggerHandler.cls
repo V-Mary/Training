@@ -4,10 +4,16 @@
 
 public with sharing class CaseTriggerHandler {
 
-    public static void handler(List<Case> newCases, Map<Id, Case> oldCasesByIds, System.TriggerOperation triggerOperation) {
+    public static void handler(List<Case> newCases, Map<Id, Case> oldCasesByIds, Map<Id, Case> newCasesByIds, System.TriggerOperation triggerOperation) {
         switch on triggerOperation {
             when AFTER_UPDATE {
-                CaseService.createAppointmentResources(newCases, oldCasesByIds);
+                CaseService.createAppointmentResourcesAfterOwnerUpdate(newCases, oldCasesByIds);
+            }
+            when BEFORE_INSERT {
+                CaseService.createTimeSlot(newCases);
+            }
+            when AFTER_INSERT {
+                CaseService.createAppointmentResource(newCasesByIds);
             }
         }
     }
