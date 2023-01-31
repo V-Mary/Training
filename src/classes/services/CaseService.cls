@@ -66,30 +66,41 @@ public inherited sharing class CaseService {
         insert appointmentResources;
     }
 
-    public static void createTimeSlot(List<Case> newCases) {
+    public static void createTimeSlot(Map<Id, Case> newCasesByIds) {
 
         List<Time_Slot__c> timeSlots = new List<Time_Slot__c>();
 
-        Map<String, Operating_Hours__c> operatingHoursByIdsAndDates = new Map<String, Operating_Hours__c>();
+        List<Appointment_Resource__c> appointmentResources = new List<Appointment_Resource__c>();
 
         Set<Id> accIds = new Set<Id>();
 
-        for (Case caseRecord : newCases) {
+        for (Case caseRecord : newCasesByIds.values()) {
             accIds.add(caseRecord.AccountId);
         }
 
+        Map<Id, Map<Date, Operating_Hours__c>> operatingHoursByIdsByAccountIds = new Map<Id, Map<Date, Operating_Hours__c>>();
+
         for (Account account : AccountSelector.getAccountByIds(accIds)) {
             for (Operating_Hours__c oh : account.Operating_Hours__r) {
-                operatingHoursByIdsAndDates.put(String.valueOf(account.Id) + String.valueOf(oh.Date__c), oh);
+                operatingHoursByIdsByAccountIds.put(account.Id,
+                        new Map<Date, Operating_Hours__c>{
+                                oh.Date__c => oh
+                        });
             }
         }
 
-        for (Case caseRecord : newCases) {
-            Operating_Hours__c operatingHours = operatingHoursByIdsAndDates.get(
-                    String.valueOf(caseRecord.AccountId) + String.valueOf(caseRecord.Appointment_Date__c));
+        Boutique_Resource__c defaultBoutiqueResource = BoutiqueResourceSelector.getDefaultBoutiqueResource();
+
+        for (Case caseRecord : newCasesByIds.values()) {
+            Operating_Hours__c operatingHours =
+                    operatingHoursByIdsByAccountIds.get(caseRecord.AccountId).get(caseRecord.Appointment_Date__c);
 
             if (isTimeSuitable(caseRecord, operatingHours)) {
-                timeSlots.add(new Time_Slot__c(Start__c = caseRecord.Start_Time__c, Operating_Hours__c = operatingHours.Id));
+                Time_Slot__c timeSlot = new Time_Slot__c(Start__c = caseRecord.Start_Time__c, Operating_Hours__c = operatingHours.Id);
+                timeSlots.add(timeSlot);
+
+                appointmentResources.add(new Appointment_Resource__c(Time_Slot__c = timeSlot.Id,
+                        Appointment__c = caseRecord.Id, Boutique_Resource__c = defaultBoutiqueResource.Id));
             } else {
                 caseRecord.addError('Proposed time is outside of boutique`s working hours. Please provide time within '
                         + operatingHours.Start_Time__c.hour() + ':' + operatingHours.Start_Time__c.minute() +
@@ -98,24 +109,6 @@ public inherited sharing class CaseService {
         }
 
         insert timeSlots;
-    }
-
-    public static void createAppointmentResource(Map<Id, Case> newCasesByIds) {
-
-        Boutique_Resource__c defaultBoutique = BoutiqueResourceSelector.getDefaultBoutiqueResource();
-
-        List<Appointment_Resource__c> appointmentResources = new List<Appointment_Resource__c>();
-
-        for (Case caseRecord : newCasesByIds.values()) {
-            if (isAppointmentRequestRT(caseRecord)) {
-                appointmentResources.add(
-                        new Appointment_Resource__c(
-                                Boutique_Resource__c = defaultBoutique.Id,
-                                Time_Slot__c = caseRecord.Id,
-                                Appointment__c = caseRecord.Id));
-            }
-        }
-
         insert appointmentResources;
     }
 }

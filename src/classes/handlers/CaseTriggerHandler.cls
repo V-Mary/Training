@@ -9,11 +9,8 @@ public with sharing class CaseTriggerHandler {
             when AFTER_UPDATE {
                 CaseService.createAppointmentResourcesAfterOwnerUpdate(newCases, oldCasesByIds);
             }
-            when BEFORE_INSERT {
-                CaseService.createTimeSlot(newCases);
-            }
             when AFTER_INSERT {
-                CaseService.createAppointmentResource(newCasesByIds);
+                CaseService.createTimeSlot(newCasesByIds);
             }
         }
     }

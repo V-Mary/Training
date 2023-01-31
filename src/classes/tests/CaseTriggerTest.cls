@@ -70,27 +70,6 @@
         Assert.areEqual('Assigned', case2.Status);
     }
 
-    @IsTest private static void createAppointmentResourcesTest() {
-
-        Account acc = [SELECT Id FROM Account LIMIT 1];
-
-        Case caseRecord = new Case(RecordTypeId = CaseUtility.getAppointmentRequestRTId(), AccountId = acc.Id,
-                Appointment_Date__c = Date.newInstance(2023, 02, 02),
-                Start_Time__c = Time.newInstance(2, 2, 3, 4), Status = 'New', Origin = 'Web');
-
-        List<Appointment_Resource__c> appointmentResourcesBeforeInsert = [SELECT id FROM Appointment_Resource__c];
-
-        Test.startTest();
-
-        insert caseRecord;
-
-        Test.stopTest();
-
-        List<Appointment_Resource__c> appointmentResourcesAfterInsert = [SELECT id FROM Appointment_Resource__c];
-
-        Assert.areEqual(appointmentResourcesBeforeInsert.size() + 1, appointmentResourcesAfterInsert.size());
-    }
-
     @IsTest private static void createTimeSlotTest() {
 
         Contact con = [SELECT Id FROM Contact LIMIT 1];
@@ -104,6 +83,8 @@
 
         List<Time_Slot__c> timeSlotsBeforeInsert = [SELECT Id, Date__c, Start__c FROM Time_Slot__c];
 
+        List<Appointment_Resource__c> appointmentResourcesBeforeInsert = [SELECT id FROM Appointment_Resource__c];
+
 
         Test.startTest();
 
@@ -112,6 +93,10 @@
         Test.stopTest();
 
         List<Time_Slot__c> timeSlotsAfterInsert = [SELECT Id, Date__c, Start__c FROM Time_Slot__c];
+
+        List<Appointment_Resource__c> appointmentResourcesAfterInsert = [SELECT id FROM Appointment_Resource__c];
+
+        Assert.areEqual(appointmentResourcesBeforeInsert.size() + 1, appointmentResourcesAfterInsert.size());
 
         Assert.areEqual(timeSlotsBeforeInsert.size() + 1, timeSlotsAfterInsert.size());
     }
