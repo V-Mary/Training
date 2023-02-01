@@ -15,4 +15,8 @@ public inherited sharing class BoutiqueResourceSelector {
     public static List<Boutique_Resource__c> getBoutiqueResourceByUserIds(Set<Id> userIds) {
         return [SELECT User__c, Id, RecordTypeId FROM Boutique_Resource__c WHERE User__c IN :userIds];
     }
+
+    public static Boutique_Resource__c getDefaultBoutiqueResource() {
+        return [SELECT Id FROM Boutique_Resource__c WHERE Name = 'Default'];
+    }
 }
