@@ -3,7 +3,9 @@
  */
 
 import {LightningElement, api, wire, track} from 'lwc';
-import getAppointmentResourcesByBoutiqueId from '@salesforce/apex/CaseController.getAppointmentResourcesByBoutiqueId';
+import getAppointmentResourcesByBoutiqueId
+    from '@salesforce/apex/AppointmentResourcesSelector.getAppointmentResourcesByBoutiqueId';
+import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 
 const COLS = [
     {
@@ -57,6 +59,15 @@ export default class BoutiqueAppointments extends LightningElement {
                 preparedCases.push(preparedCase);
             });
             this.data = preparedCases;
+        } else if (error) {
+            const evt = new ShowToastEvent({
+                title: 'Error',
+                message: error,
+                variant: 'error',
+                mode: 'dismissable'
+            });
+            this.dispatchEvent(evt);
         }
-    };
+        ;
+    }
 }

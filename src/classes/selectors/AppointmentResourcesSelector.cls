@@ -30,6 +30,7 @@ public inherited sharing class AppointmentResourcesSelector {
                 FROM Appointment_Resource__c
                 WHERE Boutique_Resource__c = :boutiqueId
                 AND Appointment__r.RecordTypeId = :CaseUtility.getAppointmentRequestRTId()
+                LIMIT 10
         ];
     }
 }
