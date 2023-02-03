@@ -4,7 +4,7 @@
 
 import {LightningElement, api, wire, track} from 'lwc';
 import getAppointmentResourcesByBoutiqueId
-    from '@salesforce/apex/AppointmentResourcesSelector.getAppointmentResourcesByBoutiqueId';
+    from '@salesforce/apex/AppointmentResourceController.getAppointmentResourcesByBoutiqueId';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 
 const COLS = [

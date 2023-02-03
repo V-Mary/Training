@@ -24,16 +24,12 @@
                         </div>
                     </div>
                 </th>
-                <th class="slds-is-resizable slds-is-sortable slds-cell_action-mode slds-cell-fixed" scope="col">
-                    Boutique
-                </th>
-                <th class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">Customer</th>
-                <th class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">Phone</th>
-                <th class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">Email</th>
-                <th class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">Purpose of Visit</th>
-                <th class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">Date</th>
-                <th class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">Start time</th>
-                <th class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">Comments</th>
+                <template for:each={columns} for:item="column">
+                    <th key={column.Id}
+                        class="slds-is-resizable slds-is-sortable slds-cell_action-mode slds-cell-fixed" scope="col">
+                        <div class="slds-truncate">{column}</div>
+                    </th>
+                </template>
             </tr>
             </thead>
             <tbody>
@@ -49,24 +45,11 @@
                             </label>
                         </div>
                     </td>
-                    <td class="slds-cell_action-mode slds-truncate" role="gridcell">
-                        <lightning-formatted-url value={caseRecord.BoutiqueURL} label={caseRecord.BoutiqueName}>
-                        </lightning-formatted-url>
-                    </td>
-                    <td class="slds-cell_action-mode slds-truncate" role="gridcell">
-                        <lightning-formatted-url value={caseRecord.CustomerURL} label={caseRecord.CustomerName}>
-                        </lightning-formatted-url>
-                    </td>
-                    <td class="slds-cell_action-mode slds-truncate" role="gridcell">{caseRecord.Phone}</td>
-                    <td class="slds-cell_action-mode slds-truncate" role="gridcell">{caseRecord.Email}</td>
-                    <td class="slds-cell_action-mode slds-truncate" role="gridcell">{caseRecord.Visit}</td>
-                    <td class="slds-cell_action-mode slds-truncate" role="gridcell">{caseRecord.AppointmentDate}</td>
-                    <td class="slds-cell_action-mode slds-truncate" role="gridcell">
-                        <lightning-formatted-date-time value={caseRecord.StartTime} hour="2-digit" minute="2-digit"
-                                                       second="2-digit" hour12="true">
-                        </lightning-formatted-date-time>
-                    </td>
-                    <td class="slds-cell_action-mode slds-truncate" role="gridcell">{caseRecord.Comments}</td>
+                    <template for:each={columns} for:item="column">
+                        <td key={column.Id} class="slds-cell_action-mode slds-truncate" role="gridcell">
+                            <c-table-row record={caseRecord} field={column}></c-table-row>
+                        </td>
+                    </template>
                 </tr>
             </template>
             </tbody>
