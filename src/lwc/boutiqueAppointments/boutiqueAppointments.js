@@ -46,6 +46,12 @@ const COLS = [
 export default class BoutiqueAppointments extends NavigationMixin(LightningElement) {
     @api recordId;
     @track data = [];
+
+    newCases = [];
+    workingCases = [];
+    escalatedCases = [];
+    closedCases = [];
+    assignedCases = [];
     @track columns = COLS;
 
     @track dataToDisplay = [];
@@ -55,7 +61,19 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
     @track pageSize = 5;
     @track totalRecountCount = 0;
     @track totalPage = 0;
+
+    @track status;
     isPageChanged = false;
+
+    get options() {
+        return [
+            {label: 'New', value: 'New'},
+            {label: 'Working', value: 'Working'},
+            {label: 'Escalated', value: 'Escalated'},
+            {label: 'Closed', value: 'Closed'},
+            {label: 'Assigned', value: 'Assigned'}
+        ];
+    }
 
     @wire(getAppointmentResourcesByBoutiqueId, {boutiqueId: '$recordId'})
     wiredCases({error, data}) {
@@ -65,6 +83,7 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
             this.data.forEach(caseRecord => {
                 let preparedCase = {};
                 preparedCase.CaseId = caseRecord.Appointment__c;
+                preparedCase.CaseStatus = caseRecord.Appointment__r.Status;
                 preparedCase.Boutique = '/lightning/r/Boutique/' + caseRecord.Appointment__r.Boutique__c + '/view';
                 preparedCase.AppointmentDate = caseRecord.Appointment__r.Appointment_Date__c;
                 preparedCase.StartTime = caseRecord.Appointment__r.Start_Time__c;
@@ -149,5 +168,53 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
                 });
                 break;
         }
+    }
+
+    filterCasesByStatus(data) {
+        data.forEach(caseRecord => {
+            switch (caseRecord.CaseStatus) {
+                case 'New':
+                    this.newCases.push(caseRecord);
+                    break;
+                case 'Working':
+                    this.workingCases.push(caseRecord);
+                    break;
+                case 'Escalated':
+                    this.escalatedCases.push(caseRecord);
+                    break;
+                case 'Closed':
+                    this.closedCases.push(caseRecord);
+                    break;
+                case 'Assigned':
+                    this.assignedCases.push(caseRecord);
+                    break;
+            }
+        });
+    }
+
+    handleStatusFilter(event) {
+        this.status = event.target.value;
+
+        this.filterCasesByStatus(this.data);
+
+        switch (this.status) {
+            case 'New':
+                this.data = this.newCases;
+                break;
+            case 'Working':
+                this.data = this.workingCases;
+                break;
+            case 'Escalated':
+                this.data = this.escalatedCases;
+                break;
+            case 'Closed':
+                this.data = this.closedCases;
+                break;
+            case 'Assigned':
+                this.data = this.assignedCases;
+                break;
+        }
+
+        this.processRecords(this.data);
     }
 }

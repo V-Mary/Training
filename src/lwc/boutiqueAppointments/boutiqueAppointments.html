@@ -4,8 +4,15 @@
 
 <!-- Boutique Appointments -->
 <template>
-
     <div>
+        <lightning-layout>
+            <lightning-combobox
+                    name="status"
+                    value={status}
+                    placeholder="Select Case status"
+                    options={options}
+                    onchange={handleStatusFilter}></lightning-combobox>
+        </lightning-layout>
         <lightning-layout>
             <lightning-input type="number" placeholder="Enter number of records" variant="label-hidden"
                              style="width: 200px" onchange={handlePageSize}></lightning-input>
