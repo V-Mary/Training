@@ -6,7 +6,7 @@
 <template>
 
     <div>
-        <lightning-layout >
+        <lightning-layout>
             <lightning-input type="number" placeholder="Enter number of records" variant="label-hidden"
                              style="width: 200px" onchange={handlePageSize}></lightning-input>
             <lightning-button
@@ -18,7 +18,7 @@
                 key-field="id"
                 data={dataToDisplay}
                 columns={columns}
-                data-id="table">
+                onrowaction={handleRowAction}>
         </lightning-datatable>
         <lightning-layout horizontal-align="space">
             <lightning-layout-item flexibility="auto">
