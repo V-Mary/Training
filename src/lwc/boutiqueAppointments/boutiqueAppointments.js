@@ -6,6 +6,13 @@ import {LightningElement, api, wire, track} from 'lwc';
 import getAppointmentResourcesByBoutiqueId
     from '@salesforce/apex/AppointmentResourceController.getAppointmentResourcesByBoutiqueId';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
+import {NavigationMixin} from 'lightning/navigation';
+
+const actions = [
+    {label: 'View', name: 'view'},
+    {label: 'Edit', name: 'edit'},
+    {label: 'Delete', name: 'delete'}
+];
 
 const COLS = [
     {
@@ -29,11 +36,14 @@ const COLS = [
         }
     },
     {
-        label: 'Comments', fieldName: 'Comments'
+        label: 'Action',
+        type: 'action',
+        initialWidth: '50px',
+        typeAttributes: {rowActions: actions},
     }
 ];
 
-export default class BoutiqueAppointments extends LightningElement {
+export default class BoutiqueAppointments extends NavigationMixin(LightningElement) {
     @api recordId;
     @track data = [];
     @track columns = COLS;
@@ -54,6 +64,7 @@ export default class BoutiqueAppointments extends LightningElement {
             let preparedCases = [];
             this.data.forEach(caseRecord => {
                 let preparedCase = {};
+                preparedCase.CaseId = caseRecord.Appointment__c;
                 preparedCase.Boutique = '/lightning/r/Boutique/' + caseRecord.Appointment__r.Boutique__c + '/view';
                 preparedCase.AppointmentDate = caseRecord.Appointment__r.Appointment_Date__c;
                 preparedCase.StartTime = caseRecord.Appointment__r.Start_Time__c;
@@ -121,5 +132,24 @@ export default class BoutiqueAppointments extends LightningElement {
         this.displayRecordPerPage(this.page);
         this.totalPage = Math.ceil(this.totalRecountCount / this.pageSize);
         eval("$A.get('e.force:refreshView').fire();");
+    }
+
+    handleRowAction(event) {
+
+        const actionName = event.detail.action.name;
+        const row = event.detail.row;
+        console.log(row);
+        switch (actionName) {
+            case 'edit':
+                this[NavigationMixin.Navigate]({
+                    type: 'standard__recordPage',
+                    attributes: {
+                        recordId: row.CaseId,
+                        objectApiName: 'Case',
+                        actionName: 'edit'
+                    }
+                });
+                break;
+        }
     }
 }
