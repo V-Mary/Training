@@ -135,10 +135,8 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
     }
 
     handleRowAction(event) {
-
         const actionName = event.detail.action.name;
         const row = event.detail.row;
-        console.log(row);
         switch (actionName) {
             case 'edit':
                 this[NavigationMixin.Navigate]({
