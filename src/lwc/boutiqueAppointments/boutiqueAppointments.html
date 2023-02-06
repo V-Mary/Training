@@ -4,11 +4,41 @@
 
 <!-- Boutique Appointments -->
 <template>
-    <div style="height: 300px;">
-        <c-custom-type-datatable
+
+    <div>
+        <lightning-layout >
+            <lightning-input type="number" placeholder="Enter number of records" variant="label-hidden"
+                             style="width: 200px" onchange={handlePageSize}></lightning-input>
+            <lightning-button
+                    label="Update table"
+                    onclick={updateTable}>
+            </lightning-button>
+        </lightning-layout>
+        <lightning-datatable
                 key-field="id"
-                data={data}
-                columns={columns}>
-        </c-custom-type-datatable>
+                data={dataToDisplay}
+                columns={columns}
+                data-id="table">
+        </lightning-datatable>
+        <lightning-layout horizontal-align="space">
+            <lightning-layout-item flexibility="auto">
+                <lightning-button
+                        label="Previous"
+                        icon-name="utility:chevronleft"
+                        onclick={previousHandler}>
+                </lightning-button>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto">
+                Page {page} of {totalPage}
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto">
+                <lightning-button
+                        label="Next"
+                        icon-name="utility:chevronright"
+                        icon-position="right"
+                        onclick={nextHandler}>
+                </lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
     </div>
 </template>

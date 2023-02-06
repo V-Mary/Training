@@ -29,10 +29,7 @@ const COLS = [
         }
     },
     {
-        label: 'Comments', type: 'customComment',
-        typeAttributes: {
-            comment: {fieldName: 'Comments'}
-        }
+        label: 'Comments', fieldName: 'Comments'
     }
 ];
 
@@ -40,6 +37,15 @@ export default class BoutiqueAppointments extends LightningElement {
     @api recordId;
     @track data = [];
     @track columns = COLS;
+
+    @track dataToDisplay = [];
+    @track page = 1;
+    @track startingRecord = 1;
+    @track endingRecord = 0;
+    @track pageSize = 5;
+    @track totalRecountCount = 0;
+    @track totalPage = 0;
+    isPageChanged = false;
 
     @wire(getAppointmentResourcesByBoutiqueId, {boutiqueId: '$recordId'})
     wiredCases({error, data}) {
@@ -59,6 +65,7 @@ export default class BoutiqueAppointments extends LightningElement {
                 preparedCases.push(preparedCase);
             });
             this.data = preparedCases;
+            this.processRecords(this.data);
         } else if (error) {
             const evt = new ShowToastEvent({
                 title: 'Error',
@@ -68,6 +75,51 @@ export default class BoutiqueAppointments extends LightningElement {
             });
             this.dispatchEvent(evt);
         }
-        ;
+    }
+
+    processRecords(data) {
+        this.items = data;
+        this.totalRecountCount = data.length;
+        this.totalPage = Math.ceil(this.totalRecountCount / this.pageSize);
+
+        this.dataToDisplay = this.items.slice(0, this.pageSize);
+        this.endingRecord = this.pageSize;
+    }
+
+    previousHandler() {
+        this.isPageChanged = true;
+        if (this.page > 1) {
+            this.page = this.page - 1;
+            this.displayRecordPerPage(this.page);
+        }
+    }
+
+    nextHandler() {
+        this.isPageChanged = true;
+        if ((this.page < this.totalPage) && this.page !== this.totalPage) {
+            this.page = this.page + 1;
+            this.displayRecordPerPage(this.page);
+        }
+    }
+
+    displayRecordPerPage(page) {
+        this.startingRecord = ((page - 1) * this.pageSize);
+        this.endingRecord = (this.pageSize * page);
+
+        this.endingRecord = (this.endingRecord > this.totalRecountCount)
+            ? this.totalRecountCount : this.endingRecord;
+
+        this.dataToDisplay = this.data.slice(this.startingRecord, this.endingRecord);
+        this.startingRecord = this.startingRecord + 1;
+    }
+
+    handlePageSize(event) {
+        this.pageSize = event.target.value;
+    }
+
+    updateTable() {
+        this.displayRecordPerPage(this.page);
+        this.totalPage = Math.ceil(this.totalRecountCount / this.pageSize);
+        eval("$A.get('e.force:refreshView').fire();");
     }
 }
