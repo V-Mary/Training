@@ -67,6 +67,18 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
 
     caseRecordTypeId;
 
+    rowId;
+
+    @track showModal = false;
+
+    closeModal() {
+        this.showModal = false;
+    }
+
+    showModalPopup() {
+        this.showModal = true;
+    }
+
     @wire(getCaseRTId) WiredCaseRecordTypeId({error, data}) {
         if (data) {
             this.caseRecordTypeId = data;
@@ -180,17 +192,10 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
 
     handleRowAction(event) {
         const actionName = event.detail.action.name;
-        const row = event.detail.row;
+        this.rowId = event.detail.row.CaseId;
         switch (actionName) {
             case 'edit':
-                this[NavigationMixin.Navigate]({
-                    type: 'standard__recordPage',
-                    attributes: {
-                        recordId: row.CaseId,
-                        objectApiName: 'Case',
-                        actionName: 'edit'
-                    }
-                });
+                this.showModalPopup();
                 break;
         }
     }
