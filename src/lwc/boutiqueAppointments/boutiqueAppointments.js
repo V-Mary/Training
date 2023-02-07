@@ -7,6 +7,9 @@ import getAppointmentResourcesByBoutiqueId
     from '@salesforce/apex/AppointmentResourceController.getAppointmentResourcesByBoutiqueId';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 import {NavigationMixin} from 'lightning/navigation';
+import {getPicklistValuesByRecordType} from 'lightning/uiObjectInfoApi';
+import CASE_OBJECT from '@salesforce/schema/Case';
+import getCaseRTId from '@salesforce/apex/CaseController.getAppointmentRequestRTId';
 
 const actions = [
     {label: 'View', name: 'view'},
@@ -47,11 +50,8 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
     @api recordId;
     @track data = [];
 
-    newCases = [];
-    workingCases = [];
-    escalatedCases = [];
-    closedCases = [];
-    assignedCases = [];
+    allData = [];
+    @track caseStatus;
     @track columns = COLS;
 
     @track dataToDisplay = [];
@@ -65,15 +65,39 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
     @track status;
     isPageChanged = false;
 
-    get options() {
-        return [
-            {label: 'New', value: 'New'},
-            {label: 'Working', value: 'Working'},
-            {label: 'Escalated', value: 'Escalated'},
-            {label: 'Closed', value: 'Closed'},
-            {label: 'Assigned', value: 'Assigned'}
-        ];
-    }
+    caseRecordTypeId;
+
+    @wire(getCaseRTId) WiredCaseRecordTypeId({error, data}) {
+        if (data) {
+            this.caseRecordTypeId = data;
+        } else if (error) {
+            const evt = new ShowToastEvent({
+                title: 'Error',
+                message: error,
+                variant: 'error',
+                mode: 'dismissable'
+            });
+            this.dispatchEvent(evt);
+        }
+    };
+
+    @wire(getPicklistValuesByRecordType, {
+        objectApiName: CASE_OBJECT,
+        recordTypeId: '$caseRecordTypeId'
+    })
+    wiredCaseStatus({error, data}) {
+        if (data) {
+            this.caseStatus = data.picklistFieldValues.Status.values;
+        } else if (error) {
+            const evt = new ShowToastEvent({
+                title: 'Error',
+                message: error,
+                variant: 'error',
+                mode: 'dismissable'
+            });
+            this.dispatchEvent(evt);
+        }
+    };
 
     @wire(getAppointmentResourcesByBoutiqueId, {boutiqueId: '$recordId'})
     wiredCases({error, data}) {
@@ -95,6 +119,7 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
                 preparedCases.push(preparedCase);
             });
             this.data = preparedCases;
+            this.allData = preparedCases;
             this.processRecords(this.data);
         } else if (error) {
             const evt = new ShowToastEvent({
@@ -170,50 +195,14 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
         }
     }
 
-    filterCasesByStatus(data) {
-        data.forEach(caseRecord => {
-            switch (caseRecord.CaseStatus) {
-                case 'New':
-                    this.newCases.push(caseRecord);
-                    break;
-                case 'Working':
-                    this.workingCases.push(caseRecord);
-                    break;
-                case 'Escalated':
-                    this.escalatedCases.push(caseRecord);
-                    break;
-                case 'Closed':
-                    this.closedCases.push(caseRecord);
-                    break;
-                case 'Assigned':
-                    this.assignedCases.push(caseRecord);
-                    break;
-            }
-        });
+    filterCasesByStatus(status) {
+        this.data = this.allData.filter(caseRecord => caseRecord.CaseStatus == status);
     }
 
     handleStatusFilter(event) {
         this.status = event.target.value;
 
-        this.filterCasesByStatus(this.data);
-
-        switch (this.status) {
-            case 'New':
-                this.data = this.newCases;
-                break;
-            case 'Working':
-                this.data = this.workingCases;
-                break;
-            case 'Escalated':
-                this.data = this.escalatedCases;
-                break;
-            case 'Closed':
-                this.data = this.closedCases;
-                break;
-            case 'Assigned':
-                this.data = this.assignedCases;
-                break;
-        }
+        this.filterCasesByStatus(this.status);
 
         this.processRecords(this.data);
     }
