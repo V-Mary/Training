@@ -18,6 +18,7 @@ public inherited sharing class AppointmentResourcesSelector {
         return [
                 SELECT Appointment__r.Boutique__c,
                         Appointment__r.Start_Time__c,
+                        Appointment__r.Status,
                         Appointment__r.Additional_Comments__c,
                         Appointment__r.Appointment_Date__c,
                         Appointment__r.Customer__c,

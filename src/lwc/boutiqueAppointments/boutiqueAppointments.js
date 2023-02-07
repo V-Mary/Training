@@ -7,6 +7,9 @@ import getAppointmentResourcesByBoutiqueId
     from '@salesforce/apex/AppointmentResourceController.getAppointmentResourcesByBoutiqueId';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 import {NavigationMixin} from 'lightning/navigation';
+import {getPicklistValuesByRecordType} from 'lightning/uiObjectInfoApi';
+import CASE_OBJECT from '@salesforce/schema/Case';
+import getCaseRTId from '@salesforce/apex/CaseController.getAppointmentRequestRTId';
 
 const actions = [
     {label: 'View', name: 'view'},
@@ -46,6 +49,9 @@ const COLS = [
 export default class BoutiqueAppointments extends NavigationMixin(LightningElement) {
     @api recordId;
     @track data = [];
+
+    allData = [];
+    @track caseStatus;
     @track columns = COLS;
 
     @track dataToDisplay = [];
@@ -55,7 +61,43 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
     @track pageSize = 5;
     @track totalRecountCount = 0;
     @track totalPage = 0;
+
+    @track status;
     isPageChanged = false;
+
+    caseRecordTypeId;
+
+    @wire(getCaseRTId) WiredCaseRecordTypeId({error, data}) {
+        if (data) {
+            this.caseRecordTypeId = data;
+        } else if (error) {
+            const evt = new ShowToastEvent({
+                title: 'Error',
+                message: error,
+                variant: 'error',
+                mode: 'dismissable'
+            });
+            this.dispatchEvent(evt);
+        }
+    };
+
+    @wire(getPicklistValuesByRecordType, {
+        objectApiName: CASE_OBJECT,
+        recordTypeId: '$caseRecordTypeId'
+    })
+    wiredCaseStatus({error, data}) {
+        if (data) {
+            this.caseStatus = data.picklistFieldValues.Status.values;
+        } else if (error) {
+            const evt = new ShowToastEvent({
+                title: 'Error',
+                message: error,
+                variant: 'error',
+                mode: 'dismissable'
+            });
+            this.dispatchEvent(evt);
+        }
+    };
 
     @wire(getAppointmentResourcesByBoutiqueId, {boutiqueId: '$recordId'})
     wiredCases({error, data}) {
@@ -65,6 +107,7 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
             this.data.forEach(caseRecord => {
                 let preparedCase = {};
                 preparedCase.CaseId = caseRecord.Appointment__c;
+                preparedCase.CaseStatus = caseRecord.Appointment__r.Status;
                 preparedCase.Boutique = '/lightning/r/Boutique/' + caseRecord.Appointment__r.Boutique__c + '/view';
                 preparedCase.AppointmentDate = caseRecord.Appointment__r.Appointment_Date__c;
                 preparedCase.StartTime = caseRecord.Appointment__r.Start_Time__c;
@@ -76,6 +119,7 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
                 preparedCases.push(preparedCase);
             });
             this.data = preparedCases;
+            this.allData = preparedCases;
             this.processRecords(this.data);
         } else if (error) {
             const evt = new ShowToastEvent({
@@ -149,5 +193,17 @@ export default class BoutiqueAppointments extends NavigationMixin(LightningEleme
                 });
                 break;
         }
+    }
+
+    filterCasesByStatus(status) {
+        this.data = this.allData.filter(caseRecord => caseRecord.CaseStatus == status);
+    }
+
+    handleStatusFilter(event) {
+        this.status = event.target.value;
+
+        this.filterCasesByStatus(this.status);
+
+        this.processRecords(this.data);
     }
 }
