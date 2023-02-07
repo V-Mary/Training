@@ -5,6 +5,12 @@
 <!-- Boutique Appointments -->
 <template>
     <div>
+        <template if:true={showModal}>
+            <c-case-edit-modal show-modal={showModal} onclose={closeModal} record-id={rowId}>
+            </c-case-edit-modal>
+        </template>
+    </div>
+    <div>
         <lightning-layout>
             <lightning-combobox
                     name="status"

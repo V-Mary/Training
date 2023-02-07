@@ -1,0 +1,43 @@
+<!--
+ - Created by Mariya on 06.02.2023.
+ -->
+
+<!-- Case Edit Modal -->
+<template>
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+             class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit case</h1>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <lightning-record-edit-form
+                        object-api-name={objectApiName}
+                        record-id={recordId}
+                        onsuccess={successMessage}
+                        onerror={errorMessage}>
+                    <lightning-input-field field-name={caseNumber}></lightning-input-field>
+                    <lightning-input-field field-name={caseSubject}></lightning-input-field>
+                    <lightning-input-field field-name={caseStatus}></lightning-input-field>
+                    <lightning-input-field field-name={caseEscalated}></lightning-input-field>
+                    <lightning-input-field field-name={caseDate}></lightning-input-field>
+                    <div class="slds-modal__footer">
+                        <lightning-button
+                                class="slds-m-right_small"
+                                onclick={closeModal}
+                                variant="brand"
+                                label="Cancel">
+                        </lightning-button>
+                        <lightning-button
+                                variant="brand"
+                                type="submit"
+                                name="update"
+                                label="Update">
+                        </lightning-button>
+                    </div>
+                </lightning-record-edit-form>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+</template>
